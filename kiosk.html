@@ -1,0 +1,759 @@
+  <!DOCTYPE html>
+  <html lang="ms">
+  <head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SKP — Kiosk Pelajar | MRSM Gerik</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+  :root{
+  /* VIVA2-style — clean white + institutional blue + MRSM green accent */
+  --blue-dk: #1a3a6b;
+  --blue-md: #2455a0;
+  --blue-lt: #3a78d4;
+  --blue-pale: #e8f0fc;
+  --blue-pale2:#d0e0f8;
+  --green-dk: #1a4a2e;
+  --green-md: #2d7a4e;
+  --green-pale:#e6f4ec;
+  --red: #c0392b;
+  --red-pale: #fdf0ee;
+  --red-pale2: #f5ccc8;
+  --teal: #0e7a60;
+  --teal-pale: #e6f5f1;
+  --teal-pale2:#b8e0d4;
+  --amber: #b87800;
+  --amber-pale:#fdf4e0;
+  --white: #ffffff;
+  --bg: #f4f6fb;
+  --bg2: #eef1f8;
+  --border: #d8dff0;
+  --border2: #c4cee8;
+  --text-hd: #0f1e3a;
+  --text-bd: #1e3060;
+  --text-sm: #4a5e84;
+  --text-xs: #8094b8;
+  --shadow-sm: 0 1px 4px rgba(26,58,107,0.07), 0 2px 10px rgba(26,58,107,0.04);
+  --shadow-md: 0 4px 20px rgba(26,58,107,0.1), 0 1px 6px rgba(26,58,107,0.06);
+  --shadow-lg: 0 10px 48px rgba(26,58,107,0.14), 0 3px 14px rgba(26,58,107,0.08);
+  --shadow-xl: 0 20px 60px rgba(26,58,107,0.16), 0 6px 20px rgba(26,58,107,0.08);
+  --r-sm: 10px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px;
+  --sans: 'Nunito', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  }
+
+  html{scroll-behavior:smooth;}
+  body{
+  font-family:var(--sans);
+  background:var(--bg);
+  color:var(--text-hd);
+  min-height:100vh;
+  overflow-x:hidden;
+  }
+
+  /* subtle bg pattern */
+  body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+  radial-gradient(ellipse 60% 50% at 0% 0%, rgba(36,85,160,0.07) 0%,transparent 60%),
+  radial-gradient(ellipse 50% 50% at 100% 100%, rgba(26,74,46,0.05) 0%,transparent 60%);
+  }
+
+  /* NAVBAR */
+  .navbar{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:var(--blue-dk);
+  border-bottom:3px solid var(--blue-lt);
+  box-shadow:0 2px 24px rgba(26,58,107,0.3);
+  height:64px;display:flex;align-items:center;
+  }
+  .navbar-inner{
+  width:100%;max-width:1200px;margin:0 auto;
+  padding:0 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand-logo{
+  width:42px;height:42px;background:white;
+  border-radius:var(--r-sm);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;flex-shrink:0;
+  box-shadow:0 0 0 2px rgba(255,255,255,0.2);
+  }
+  .brand-logo img{width:100%;height:100%;object-fit:contain;}
+  .brand-name{font-size:0.9rem;font-weight:800;color:white;line-height:1.2;}
+  .brand-sub{font-family:var(--mono);font-size:0.52rem;color:rgba(255,255,255,0.45);letter-spacing:1.2px;text-transform:uppercase;margin-top:1px;}
+
+  .nav-sys-pill{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:100px;padding:5px 5px 5px 14px;
+  }
+  .nav-sys-lbl{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.45);letter-spacing:0.8px;}
+  .nav-demo-tag{
+  background:var(--amber);color:white;
+  font-family:var(--mono);font-size:0.52rem;font-weight:700;
+  padding:4px 10px;border-radius:100px;letter-spacing:1px;text-transform:uppercase;
+  }
+
+  .nav-right{display:flex;align-items:center;gap:12px;}
+  .nav-clock{text-align:right;}
+  .nav-clock-time{font-family:var(--mono);font-size:0.88rem;font-weight:600;color:white;letter-spacing:2px;}
+  .nav-clock-date{font-family:var(--mono);font-size:0.5rem;color:rgba(255,255,255,0.35);letter-spacing:0.8px;text-transform:uppercase;margin-top:1px;}
+
+  .btn-warden{
+  display:flex;align-items:center;gap:6px;
+  padding:8px 16px;
+  background:rgba(255,255,255,0.1);
+  border:1.5px solid rgba(255,255,255,0.2);
+  border-radius:var(--r-sm);
+  color:rgba(255,255,255,0.8);
+  font-family:var(--sans);font-size:0.75rem;font-weight:700;
+  text-decoration:none;cursor:pointer;transition:all 0.2s;
+  }
+  .btn-warden:hover{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.35);color:white;}
+
+  /* SUBBAR */
+  .subbar{
+  position:fixed;top:64px;left:0;right:0;z-index:190;
+  background:var(--blue-md);
+  height:30px;display:flex;align-items:center;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .subbar-inner{
+  width:100%;max-width:1200px;margin:0 auto;
+  padding:0 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  }
+  .subbar-addr{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.35);letter-spacing:0.5px;}
+  .subbar-live{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.4);}
+  .live-dot{width:5px;height:5px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80;animation:pdot 2s infinite;}
+  @keyframes pdot{0%,100%{opacity:1;box-shadow:0 0 6px #4ade80}50%{opacity:.4;box-shadow:0 0 2px #4ade80}}
+
+  /* LAYOUT */
+  .layout{
+  position:relative;z-index:1;
+  padding-top:94px;
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:280px 1fr 260px;
+  max-width:1200px;margin:0 auto;
+  padding-left:24px;padding-right:24px;
+  gap:24px;
+  align-items:start;
+  padding-bottom:40px;
+  }
+
+  /* LEFT PANEL */
+  .panel-left{
+  padding-top:28px;
+  display:flex;flex-direction:column;gap:16px;
+  opacity:0;
+  }
+
+  .school-card{
+  background:var(--white);
+  border:1.5px solid var(--border);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  box-shadow:var(--shadow-md);
+  }
+  .school-card-top{
+  background:var(--blue-dk);
+  padding:20px;
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  text-align:center;
+  }
+  .school-logo-wrap{
+  width:68px;height:68px;
+  background:white;border-radius:var(--r-md);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  box-shadow:0 0 0 3px rgba(255,255,255,0.15);
+  }
+  .school-logo-wrap img{width:100%;height:100%;object-fit:contain;}
+  .school-card-name{font-size:0.85rem;font-weight:800;color:white;line-height:1.3;}
+  .school-card-loc{font-family:var(--mono);font-size:0.58rem;color:rgba(255,255,255,0.4);margin-top:2px;letter-spacing:0.5px;}
+  .school-card-bottom{
+  padding:16px 18px;
+  background:var(--bg2);
+  border-top:1px solid var(--border);
+  text-align:center;
+  }
+  .motto{font-size:0.72rem;font-weight:700;color:var(--blue-md);font-style:italic;}
+
+  /* out card */
+  .out-card{
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);
+  }
+  .out-card-hd{
+  padding:12px 16px;background:var(--bg2);
+  border-bottom:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  }
+  .out-hd-left{display:flex;align-items:center;gap:7px;font-size:0.72rem;font-weight:800;color:var(--text-bd);}
+  .out-pulse{width:7px;height:7px;border-radius:50%;background:var(--red);animation:pulse-r 2s infinite;}
+  @keyframes pulse-r{0%{box-shadow:0 0 0 0 rgba(192,57,43,0.4)}70%{box-shadow:0 0 0 6px rgba(192,57,43,0)}100%{box-shadow:0 0 0 0 rgba(192,57,43,0)}}
+  .out-badge{
+  font-family:var(--mono);font-size:0.6rem;font-weight:600;
+  background:var(--red-pale);color:var(--red);
+  border:1px solid var(--red-pale2);
+  padding:2px 8px;border-radius:100px;
+  }
+  .out-list{padding:6px 0;max-height:160px;overflow-y:auto;}
+  .out-list::-webkit-scrollbar{width:3px;}
+  .out-list::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+  .out-item{
+  padding:8px 16px;display:flex;align-items:center;gap:10px;
+  transition:background 0.15s;
+  }
+  .out-item:hover{background:var(--bg);}
+  .out-dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;animation:pulse-r 2s infinite;}
+  .out-id{font-family:var(--mono);font-size:0.72rem;font-weight:600;color:var(--text-hd);flex:1;}
+  .out-time{font-family:var(--mono);font-size:0.6rem;color:var(--text-xs);}
+  .out-empty{padding:20px 16px;text-align:center;font-size:0.72rem;color:var(--text-xs);}
+
+  /* CENTRE */
+  .centre{
+  padding-top:28px;padding-bottom:40px;
+  display:flex;flex-direction:column;align-items:center;gap:18px;
+  }
+
+  /* greeting */
+  .greeting-block{
+  text-align:center;
+  opacity:0;
+  }
+  .greeting-period{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--blue-pale);border:1.5px solid var(--blue-pale2);
+  border-radius:100px;padding:4px 14px;margin-bottom:10px;
+  font-family:var(--mono);font-size:0.6rem;color:var(--blue-md);
+  letter-spacing:1px;text-transform:uppercase;
+  }
+  .greeting-main{font-size:1.4rem;font-weight:900;color:var(--blue-dk);letter-spacing:-0.3px;line-height:1.2;}
+  .greeting-desc{font-size:0.8rem;color:var(--text-sm);margin-top:4px;font-weight:500;}
+
+  /* mode switch */
+  .mode-row{
+  display:flex;background:var(--bg2);border:1.5px solid var(--border);
+  border-radius:100px;padding:4px;gap:4px;
+  width:100%;max-width:380px;
+  box-shadow:var(--shadow-sm);
+  opacity:0;
+  }
+  .mode-btn{
+  flex:1;padding:9px 12px;border-radius:100px;
+  font-family:var(--sans);font-size:0.78rem;font-weight:700;
+  cursor:pointer;border:none;background:transparent;color:var(--text-xs);
+  transition:all 0.25s;display:flex;align-items:center;justify-content:center;gap:5px;
+  }
+  .mode-btn.sel-out{background:var(--red);color:white;box-shadow:0 4px 14px rgba(192,57,43,0.3);}
+  .mode-btn.sel-in {background:var(--teal);color:white;box-shadow:0 4px 14px rgba(14,122,96,0.3);}
+
+  /* main card */
+  .main-card{
+  width:100%;max-width:440px;
+  background:var(--white);
+  border:1.5px solid var(--border);
+  border-radius:var(--r-xl);
+  overflow:hidden;
+  box-shadow:var(--shadow-xl);
+  opacity:0;
+  }
+
+  .card-top-bar{height:4px;transition:background 0.4s;}
+  .card-top-bar.bar-out{background:linear-gradient(90deg,var(--red),#e05a50);}
+  .card-top-bar.bar-in {background:linear-gradient(90deg,var(--teal),#1a9e80);}
+
+  .card-banner{
+  padding:22px 26px 18px;
+  display:flex;align-items:center;gap:14px;
+  border-bottom:1.5px solid var(--border);
+  transition:background 0.35s;
+  }
+  .card-banner.bn-out{background:linear-gradient(135deg,var(--red-pale),var(--white));}
+  .card-banner.bn-in {background:linear-gradient(135deg,var(--teal-pale),var(--white));}
+
+  .banner-ico{
+  width:50px;height:50px;border-radius:var(--r-md);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;flex-shrink:0;background:white;transition:all 0.3s;
+  }
+  .banner-ico.ico-out{border:1.5px solid var(--red-pale2);box-shadow:0 3px 10px rgba(192,57,43,0.12);}
+  .banner-ico.ico-in {border:1.5px solid var(--teal-pale2);box-shadow:0 3px 10px rgba(14,122,96,0.12);}
+
+  .banner-ttl{font-size:1.1rem;font-weight:800;letter-spacing:-0.2px;transition:color 0.3s;}
+  .banner-ttl.ttl-out{color:var(--red);}
+  .banner-ttl.ttl-in {color:var(--teal);}
+  .banner-dsc{font-size:0.72rem;color:var(--text-sm);margin-top:3px;}
+
+  .card-body{padding:26px;}
+
+  .lbl-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+  .f-lbl{font-family:var(--mono);font-size:0.6rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-sm);}
+  .f-hint{font-family:var(--mono);font-size:0.56px;color:var(--text-xs);}
+
+  .matric-field{
+  width:100%;padding:15px 18px;
+  background:var(--bg);border:1.5px solid var(--border);
+  border-radius:var(--r-md);
+  font-family:var(--mono);font-size:1rem;font-weight:600;
+  color:var(--text-hd);letter-spacing:3px;text-transform:uppercase;
+  outline:none;transition:all 0.2s;margin-bottom:16px;
+  }
+  .matric-field:focus{
+  background:white;border-color:var(--blue-lt);
+  box-shadow:0 0 0 4px rgba(58,120,212,0.12);
+  }
+  .matric-field::placeholder{color:var(--border2);letter-spacing:1px;font-weight:400;}
+
+  .action-btn{
+  width:100%;padding:14px;border-radius:var(--r-md);border:none;
+  font-family:var(--sans);font-size:0.88rem;font-weight:800;
+  cursor:pointer;transition:all 0.2s;letter-spacing:0.2px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  position:relative;overflow:hidden;
+  }
+  .action-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(255,255,255,0.12),transparent);pointer-events:none;}
+  .action-btn.btn-out{background:var(--red);color:white;box-shadow:0 5px 18px rgba(192,57,43,0.32);}
+  .action-btn.btn-in {background:var(--teal);color:white;box-shadow:0 5px 18px rgba(14,122,96,0.32);}
+  .action-btn:hover{transform:translateY(-1px);filter:brightness(1.05);}
+  .action-btn:active{transform:translateY(0);}
+  .action-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;filter:none;}
+
+  .toast{
+  margin-top:14px;padding:13px 16px;
+  border-radius:var(--r-md);
+  font-size:0.76rem;font-weight:600;line-height:1.6;
+  border-left:4px solid;display:none;
+  }
+  .toast.show{display:block;}
+  .toast.t-out{background:var(--red-pale);border-color:var(--red);color:var(--red);}
+  .toast.t-in {background:var(--teal-pale);border-color:var(--teal);color:var(--teal);}
+  .toast.t-err{background:var(--amber-pale);border-color:var(--amber);color:var(--amber);}
+
+  .card-footer{
+  padding:13px 26px;border-top:1.5px solid var(--border);
+  background:var(--bg);display:flex;align-items:center;justify-content:space-between;
+  }
+  .footer-l{font-family:var(--mono);font-size:0.58rem;color:var(--text-xs);}
+  .footer-r{font-family:var(--mono);font-size:0.56rem;color:var(--text-xs);}
+  .footer-r kbd{background:white;border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:var(--mono);box-shadow:0 1px 0 var(--border);}
+
+  /* RIGHT PANEL */
+  .panel-right{
+  padding-top:28px;
+  display:flex;flex-direction:column;gap:16px;
+  opacity:0;
+  }
+
+  .how-card{
+  background:var(--blue-dk);border-radius:var(--r-lg);
+  padding:20px;box-shadow:var(--shadow-md);
+  }
+  .how-hd{font-family:var(--mono);font-size:0.58rem;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.3);margin-bottom:14px;}
+  .how-steps{display:flex;flex-direction:column;gap:12px;}
+  .how-step{display:flex;align-items:flex-start;gap:10px;}
+  .step-n{
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:0.58rem;font-weight:600;color:rgba(255,255,255,0.45);
+  }
+  .step-t{font-size:0.76rem;color:rgba(255,255,255,0.5);line-height:1.5;padding-top:3px;}
+  .step-t b{color:rgba(255,255,255,0.85);font-weight:700;}
+
+  .info-card{
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);
+  }
+  .info-hd{
+  padding:11px 16px;background:var(--bg2);
+  border-bottom:1.5px solid var(--border);
+  font-size:0.72rem;font-weight:800;color:var(--text-bd);
+  display:flex;align-items:center;gap:6px;
+  }
+  .info-body{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
+  .info-r{display:flex;flex-direction:column;gap:2px;}
+  .info-l{font-family:var(--mono);font-size:0.54px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-xs);}
+  .info-v{font-size:0.76rem;font-weight:600;color:var(--text-hd);}
+  .info-v.mono{font-family:var(--mono);letter-spacing:0.5px;}
+
+  /* spinner */
+  .spinner{width:15px;height:15px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.6s linear infinite;flex-shrink:0;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* responsive */
+  @media(max-width:1050px){
+  .layout{grid-template-columns:240px 1fr;}
+  .panel-right{display:none;}
+  }
+  @media(max-width:700px){
+  .layout{grid-template-columns:1fr;padding:0 14px;}
+  .panel-left{display:none;}
+  .centre{padding-top:20px;}
+  .nav-sys-pill{display:none;}
+  .navbar-inner{padding:0 14px;}
+  .subbar{display:none;}
+  .layout{padding-top:74px;}
+  }
+  </style>
+  </head>
+  <body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+  <div class="navbar-inner">
+  <div class="brand">
+  <div class="brand-logo">
+  <img src="http://gerik.mrsm.edu.my/data/header/logo-school.png" alt="MRSM Gerik"
+  onerror="this.style.display='none';this.parentElement.innerHTML=''"/>
+  </div>
+  <div>
+  <div class="brand-name">MRSM Gerik</div>
+  <div class="brand-sub">Hulu Perak · Perak</div>
+  </div>
+  </div>
+
+  <div class="nav-sys-pill">
+  <span class="nav-sys-lbl">Sistem Kawalan Keluar Pelajar</span>
+  <span class="nav-demo-tag">Demo</span>
+  </div>
+
+  <div class="nav-right">
+  <div class="nav-clock">
+  <div class="nav-clock-time" id="nav-time">--:--:--</div>
+  <div class="nav-clock-date" id="nav-date">--</div>
+  </div>
+  <a class="btn-warden" href="admin.html">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+  Panel Warden
+  </a>
+  </div>
+  </div>
+  </nav>
+
+  <!-- SUBBAR -->
+  <div class="subbar">
+  <div class="subbar-inner">
+  <div class="subbar-addr">Bukit Nasah, Kampung Kenayat, 33300 Gerik, Hulu Perak, Perak</div>
+  <div class="subbar-live"><div class="live-dot"></div>Kiosk Aktif</div>
+  </div>
+  </div>
+
+  <!-- LAYOUT -->
+  <div class="layout">
+
+  <!-- LEFT -->
+  <aside class="panel-left" id="panel-left">
+  <div class="school-card">
+  <div class="school-card-top">
+  <div class="school-logo-wrap">
+  <!-- <img src="https://gerik.mrsm.edu.my/data/header/logo-school.png" alt="MRSM Gerik" -->
+  <img src="http://gerik.mrsm.edu.my/data/header/logo-school.png" alt="MRSM Gerik"
+  onerror="this.style.display='none';this.parentElement.innerHTML=''"/>
+  </div>
+  <div>
+  <div class="school-card-name">Maktab Rendah Sains MARA Gerik</div>
+  <div class="school-card-loc"> Bukit Nasah, 33300 Gerik, Hulu Perak</div>
+  </div>
+  </div>
+  <div class="school-card-bottom">
+  <div class="motto">"Berdisiplin · Berilmu · Beramal"</div>
+  </div>
+  </div>
+
+  <div class="out-card">
+  <div class="out-card-hd">
+  <div class="out-hd-left"><div class="out-pulse"></div>Sedang Keluar</div>
+  <div class="out-badge" id="out-badge">0 orang</div>
+  </div>
+  <div class="out-list" id="out-list">
+  <div class="out-empty">Tiada pelajar di luar kawasan</div>
+  </div>
+  </div>
+  </aside>
+
+  <!-- CENTRE -->
+  <section class="centre">
+
+  <div class="greeting-block" id="greeting-block">
+  <div class="greeting-period">
+  
+  <span id="greeting-period-lbl">Selamat Datang</span>
+  </div>
+  <div class="greeting-main" id="greeting-main">Selamat Datang</div>
+  <div class="greeting-desc" id="greeting-desc">Sila rekod pergerakan anda di bawah</div>
+  </div>
+
+  <div class="mode-row" id="mode-row">
+  <button class="mode-btn sel-out" id="m-out" onclick="setMode('out')">
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+  Keluar Kawasan
+  </button>
+  <button class="mode-btn" id="m-in" onclick="setMode('in')">
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+  Balik Kawasan
+  </button>
+  </div>
+
+  <div class="main-card" id="main-card">
+  <div class="card-top-bar bar-out" id="card-top-bar"></div>
+  <div class="card-banner bn-out" id="card-banner">
+  <div class="banner-ico ico-out" id="banner-ico"></div>
+  <div>
+  <div class="banner-ttl ttl-out" id="banner-ttl">Daftar Keluar</div>
+  <div class="banner-dsc" id="banner-dsc">Masukkan No. Matrik untuk merekod masa keluar</div>
+  </div>
+  </div>
+  <div class="card-body">
+  <div class="lbl-row">
+  <span class="f-lbl">No. Matrik Pelajar</span>
+  <span class="f-hint" style="font-family:var(--mono);font-size:0.56rem;color:var(--text-xs);">cth: 25GRK001</span>
+  </div>
+  <input class="matric-field" id="matric-input"
+  placeholder="MASUKKAN NO. MATRIK"
+  maxlength="15" autocomplete="off"
+  onkeydown="if(event.key==='Enter') handleSubmit()"/>
+  <button class="action-btn btn-out" id="action-btn" onclick="handleSubmit()">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+  Rekod Keluar
+  </button>
+  <div class="toast" id="kiosk-toast"></div>
+  </div>
+  <div class="card-footer">
+  <span class="footer-l">SKP · MRSM Gerik · 2025</span>
+  <span class="footer-r">Tekan <kbd>Enter</kbd> untuk hantar</span>
+  </div>
+  </div>
+
+  </section>
+
+  <!-- RIGHT -->
+  <aside class="panel-right" id="panel-right">
+  <div class="how-card">
+  <div class="how-hd">Cara Penggunaan</div>
+  <div class="how-steps">
+  <div class="how-step"><div class="step-n">1</div><div class="step-t">Pilih mod <b>Keluar</b> atau <b>Balik</b> kawasan.</div></div>
+  <div class="how-step"><div class="step-n">2</div><div class="step-t">Taip <b>No. Matrik</b> anda di ruang input.</div></div>
+  <div class="how-step"><div class="step-n">3</div><div class="step-t">Tekan butang atau <b>Enter</b> untuk merekod.</div></div>
+  <div class="how-step"><div class="step-n">4</div><div class="step-t">Rekod disimpan dan dapat dilihat di <b>Panel Warden</b>.</div></div>
+  </div>
+  </div>
+
+  <div class="info-card">
+  <div class="info-hd">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+  Maklumat Sistem
+  </div>
+  <div class="info-body">
+  <div class="info-r">
+  <div class="info-l" style="font-family:var(--mono);font-size:0.56rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-xs);">Institusi</div>
+  <div class="info-v">MRSM Gerik, Perak</div>
+  </div>
+  <div class="info-r">
+  <div class="info-l" style="font-family:var(--mono);font-size:0.56rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-xs);">Format Matrik</div>
+  <div class="info-v mono">YY + GRK + 3 digit</div>
+  </div>
+  <div class="info-r">
+  <div class="info-l" style="font-family:var(--mono);font-size:0.56rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-xs);">Versi</div>
+  <div class="info-v mono">SKP v1.0 · Demo</div>
+  </div>
+  <div class="info-r">
+  <div class="info-l" style="font-family:var(--mono);font-size:0.56rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-xs);">Tarikh</div>
+  <div class="info-v" id="info-date">--</div>
+  </div>
+  </div>
+  </div>
+  </aside>
+
+  </div>
+
+  <script>
+  // STORE 
+  const STORE = 'mrsm_gerik_skp_v4';
+  const getLogs = () => { try { return JSON.parse(sessionStorage.getItem(STORE)) || []; } catch { return []; } };
+  const saveLogs = d => sessionStorage.setItem(STORE, JSON.stringify(d));
+
+  // seed demo data once
+  if (!sessionStorage.getItem(STORE)) {
+  const seeds = [['25GRK001','out'],['25GRK002','in'],['25GRK003','in'],['25GRK007','out'],['25GRK012','in']];
+  saveLogs(seeds.map(([matric, status], i) => {
+  const ts = Date.now() - (i + 1) * 22 * 60000;
+  const e = {
+  id: i + 1, matric,
+  date: new Date(ts).toLocaleDateString('ms-MY'),
+  outTime: new Date(ts).toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' }),
+  outTs: ts, inTime: null, inTs: null, status
+  };
+  if (status === 'in') {
+  const it = ts + (20 + i * 8) * 60000;
+  e.inTime = new Date(it).toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' });
+  e.inTs = it;
+  }
+  return e;
+  }));
+  }
+
+  let mode = 'out';
+
+  // GREETING (safe — runs before anime) 
+  function initGreeting() {
+  const h = new Date().getHours();
+  let emoji, period, main, desc;
+  if (h < 12) { emoji=''; period='Selamat Pagi'; main='Selamat Pagi!'; desc='Mulakan hari dengan penuh semangat!'; }
+  else if (h < 15) { emoji=''; period='Selamat Tengah Hari'; main='Selamat Tengah Hari!'; desc='Harap anda sentiasa dalam keadaan baik.'; }
+  else if (h < 19) { emoji=''; period='Selamat Petang'; main='Selamat Petang!'; desc='Jaga masa, patuhi peraturan maktab.'; }
+  else { emoji=''; period='Selamat Malam'; main='Selamat Malam!'; desc='Sila semak had masa yang dibenarkan.'; }
+
+  // safe null-check before setting
+  const el = (id) => document.getElementById(id);
+  if (el('greeting-emoji')) el('greeting-emoji').textContent = emoji;
+  if (el('greeting-period-lbl')) el('greeting-period-lbl').textContent = period;
+  if (el('greeting-main')) el('greeting-main').textContent = main;
+  if (el('greeting-desc')) el('greeting-desc').textContent = desc;
+  }
+
+  // CLOCK 
+  function tick() {
+  const d = new Date();
+  const nt = document.getElementById('nav-time');
+  const nd = document.getElementById('nav-date');
+  const id = document.getElementById('info-date');
+  if (nt) nt.textContent = d.toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  if (nd) nd.textContent = d.toLocaleDateString('ms-MY', { weekday: 'short', day: 'numeric', month: 'short' }).toUpperCase();
+  if (id) id.textContent = d.toLocaleDateString('ms-MY', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  renderOutList();
+  }
+
+  // INIT — just clock, greeting text set here safely 
+  // anime animations are triggered after anime.js loads at bottom of body
+  initGreeting();
+  tick();
+  setInterval(tick, 1000);
+
+  // MODE SWITCH 
+  function setMode(m) {
+  mode = m;
+  anime({ targets: '#main-card', scale: [1, 0.99, 1], duration: 280, easing: 'easeInOutQuad' });
+
+  const get = id => document.getElementById(id);
+  if (m === 'out') {
+  get('m-out').className = 'mode-btn sel-out';
+  get('m-in').className = 'mode-btn';
+  get('card-top-bar').className = 'card-top-bar bar-out';
+  get('card-banner').className = 'card-banner bn-out';
+  get('banner-ico').className = 'banner-ico ico-out';
+  // get('banner-ico').textContent = '';
+  get('banner-ttl').className = 'banner-ttl ttl-out';
+  get('banner-ttl').textContent = 'Daftar Keluar';
+  get('banner-dsc').textContent = 'Masukkan No. Matrik untuk merekod masa keluar';
+  get('action-btn').className = 'action-btn btn-out';
+  get('action-btn').innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Rekod Keluar';
+  } else {
+  get('m-in').className = 'mode-btn sel-in';
+  get('m-out').className = 'mode-btn';
+  get('card-top-bar').className = 'card-top-bar bar-in';
+  get('card-banner').className = 'card-banner bn-in';
+  get('banner-ico').className = 'banner-ico ico-in';
+  // get('banner-ico').textContent = '';
+  get('banner-ttl').className = 'banner-ttl ttl-in';
+  get('banner-ttl').textContent = 'Daftar Balik';
+  get('banner-dsc').textContent = 'Masukkan No. Matrik untuk merekod masa kembali';
+  get('action-btn').className = 'action-btn btn-in';
+  get('action-btn').innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Rekod Masuk';
+  }
+  document.getElementById('kiosk-toast').className = 'toast';
+  document.getElementById('matric-input').focus();
+  }
+
+  // SUBMIT 
+  function handleSubmit() {
+  const raw = document.getElementById('matric-input').value.trim().toUpperCase();
+  const toast = document.getElementById('kiosk-toast');
+  const btn = document.getElementById('action-btn');
+  if (!raw) { showToast(toast, 't-err', ' Sila masukkan No. Matrik anda sebelum meneruskan.'); return; }
+
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Memproses...';
+  anime({ targets: '#action-btn', scale: [1, 0.97, 1], duration: 250, easing: 'easeInOutQuad' });
+
+  setTimeout(() => {
+  let logs = getLogs();
+  const now = new Date();
+  const timeS = now.toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' });
+  const dateS = now.toLocaleDateString('ms-MY');
+
+  if (mode === 'out') {
+  const dup = logs.find(l => l.matric === raw && l.status === 'out');
+  if (dup) {
+  showToast(toast, 't-err', ` ${raw} sudah merekod keluar pada ${dup.outTime}.\nSila rekod masuk dahulu apabila kembali.`);
+  btn.disabled = false; btn.innerHTML = orig; return;
+  }
+  logs.unshift({ id: logs.length + 1, matric: raw, date: dateS, outTime: timeS, outTs: Date.now(), inTime: null, inTs: null, status: 'out' });
+  showToast(toast, 't-out', ` ${raw} berjaya direkod KELUAR pada ${timeS}.\nJaga diri dan patuhi had masa yang ditetapkan.`);
+  } else {
+  const match = logs.find(l => l.matric === raw && l.status === 'out');
+  if (!match) {
+  showToast(toast, 't-err', ` Tiada rekod keluar aktif untuk ${raw}.\nSila pastikan anda telah merekod keluar terlebih dahulu.`);
+  btn.disabled = false; btn.innerHTML = orig; return;
+  }
+  match.inTime = timeS; match.inTs = Date.now(); match.status = 'in';
+  const min = Math.round((match.inTs - match.outTs) / 60000);
+  const dur = min < 60 ? min + ' minit' : Math.floor(min / 60) + 'j ' + (min % 60) + 'm';
+  showToast(toast, 't-in', ` ${raw} berjaya direkod MASUK pada ${timeS}.\nTempoh keluar: ${dur}. Selamat kembali! `);
+  }
+
+  saveLogs(logs); renderOutList();
+  btn.disabled = false; btn.innerHTML = orig;
+  document.getElementById('matric-input').value = '';
+  anime({ targets: '#main-card', boxShadow: ['0 20px 60px rgba(26,58,107,0.16)', '0 24px 70px rgba(26,58,107,0.28)', '0 20px 60px rgba(26,58,107,0.16)'], duration: 600, easing: 'easeInOutSine' });
+  document.getElementById('matric-input').focus();
+  }, 700);
+  }
+
+  function showToast(el, type, msg) {
+  el.className = `toast ${type} show`;
+  el.innerHTML = msg.replace(/\n/g, '<br/>');
+  anime({ targets: el, opacity: [0, 1], translateY: [6, 0], duration: 300, easing: 'easeOutExpo' });
+  clearTimeout(el._t);
+  el._t = setTimeout(() => {
+  anime({ targets: el, opacity: 0, translateY: 4, duration: 250, easing: 'easeInQuad', complete: () => el.classList.remove('show') });
+  }, 6000);
+  }
+
+  function renderOutList() {
+  const out = getLogs().filter(l => l.status === 'out');
+  const list = document.getElementById('out-list');
+  const badge = document.getElementById('out-badge');
+  if (!list || !badge) return;
+  badge.textContent = out.length + ' orang';
+  list.innerHTML = out.length
+  ? out.map(l => `<div class="out-item"><div class="out-dot"></div><div class="out-id">${l.matric}</div><div class="out-time">${l.outTime}</div></div>`).join('')
+  : '<div class="out-empty">Tiada pelajar di luar kawasan</div>';
+  }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script>
+  // re-run init after anime loads
+  window.addEventListener('load', () => {
+  initGreeting();
+  // animate all panels in now that anime is definitely loaded
+  anime({ targets: '#greeting-block', opacity: [0,1], translateY: [20,0], duration: 700, easing: 'easeOutExpo' });
+  anime({ targets: '#mode-row', opacity: [0,1], translateY: [14,0], duration: 600, delay: 150, easing: 'easeOutExpo' });
+  anime({ targets: '#main-card', opacity: [0,1], translateY: [18,0], scale: [0.98,1], duration: 700, delay: 200, easing: 'easeOutExpo' });
+  anime({ targets: '#panel-left', opacity: [0,1], translateX: [-18,0], duration: 600, delay: 100, easing: 'easeOutExpo' });
+  anime({ targets: '#panel-right', opacity: [0,1], translateX: [18,0], duration: 600, delay: 100, easing: 'easeOutExpo' });
+  anime({ targets: '#main-card', translateY: [0,-5], duration: 3200, direction: 'alternate', loop: true, easing: 'easeInOutSine', delay: 1000 });
+  document.getElementById('matric-input').focus();
+  });
+  </script>
+  </body>
+  </html>

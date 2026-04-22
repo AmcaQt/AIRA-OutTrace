@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SKP — Panel Warden | MRSM Gerik</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --blue-dk:   #1a3a6b;
+  --blue-md:   #2455a0;
+  --blue-lt:   #3a78d4;
+  --blue-pale: #e8f0fc;
+  --blue-pale2:#d0e0f8;
+  --green-dk:  #1a4a2e;
+  --green-md:  #2d7a4e;
+  --green-pale:#e6f4ec;
+  --green-pale2:#c8e8d4;
+  --red:       #c0392b;
+  --red-pale:  #fdf0ee;
+  --red-pale2: #f5ccc8;
+  --teal:      #0e7a60;
+  --teal-pale: #e6f5f1;
+  --teal-pale2:#b8e0d4;
+  --amber:     #b87800;
+  --amber-pale:#fdf4e0;
+  --amber-pale2:#f0d898;
+  --white:     #ffffff;
+  --bg:        #f4f6fb;
+  --bg2:       #eef1f8;
+  --border:    #d8dff0;
+  --border2:   #c4cee8;
+  --text-hd:   #0f1e3a;
+  --text-bd:   #1e3060;
+  --text-sm:   #4a5e84;
+  --text-xs:   #8094b8;
+  --shadow-sm: 0 1px 4px rgba(26,58,107,0.07),0 2px 10px rgba(26,58,107,0.04);
+  --shadow-md: 0 4px 20px rgba(26,58,107,0.1),0 1px 6px rgba(26,58,107,0.06);
+  --shadow-lg: 0 10px 48px rgba(26,58,107,0.14),0 3px 14px rgba(26,58,107,0.08);
+  --r-sm:10px;--r-md:14px;--r-lg:20px;--r-xl:28px;
+  --sans:'Nunito',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text-hd);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 50% at 0% 0%,rgba(36,85,160,0.07) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 100% 100%,rgba(26,74,46,0.05) 0%,transparent 60%);}
+
+/* ── NAVBAR ── */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--blue-dk);border-bottom:3px solid var(--blue-lt);box-shadow:0 2px 24px rgba(26,58,107,0.3);height:64px;display:flex;align-items:center;}
+.ni{width:100%;max-width:1440px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand-logo{width:42px;height:42px;background:white;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;box-shadow:0 0 0 2px rgba(255,255,255,0.2);}
+.brand-logo img{width:100%;height:100%;object-fit:contain;}
+.brand-name{font-size:0.9rem;font-weight:800;color:white;line-height:1.2;}
+.brand-sub{font-family:var(--mono);font-size:0.52rem;color:rgba(255,255,255,0.4);letter-spacing:1.2px;text-transform:uppercase;margin-top:1px;}
+
+.nav-pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:5px 5px 5px 14px;}
+.nav-pill-lbl{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.4);letter-spacing:0.8px;}
+.nav-pill-tag{background:var(--amber);color:white;font-family:var(--mono);font-size:0.52rem;font-weight:700;padding:4px 10px;border-radius:100px;letter-spacing:1px;text-transform:uppercase;}
+
+.nav-r-login{display:flex;align-items:center;gap:12px;}
+.nav-r-dash{display:none;align-items:center;gap:10px;}
+.nav-clock-time{font-family:var(--mono);font-size:0.88rem;font-weight:600;color:white;letter-spacing:2px;}
+.nav-clock-date{font-family:var(--mono);font-size:0.5rem;color:rgba(255,255,255,0.35);letter-spacing:0.8px;text-transform:uppercase;margin-top:1px;}
+.nav-user{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:100px;}
+.nav-avatar{width:26px;height:26px;border-radius:50%;background:var(--blue-lt);display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:800;color:white;}
+.nav-uname{font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.75);}
+
+.btn-nav{display:flex;align-items:center;gap:6px;padding:8px 14px;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);border-radius:var(--r-sm);color:rgba(255,255,255,0.65);font-family:var(--sans);font-size:0.72rem;font-weight:700;text-decoration:none;cursor:pointer;transition:all 0.2s;}
+.btn-nav:hover{background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.3);color:white;}
+.btn-nav.danger:hover{background:rgba(192,57,43,0.25);border-color:rgba(192,57,43,0.5);color:#fca8a0;}
+
+/* subbar */
+.subbar{position:fixed;top:64px;left:0;right:0;z-index:190;background:var(--blue-md);height:30px;display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,0.08);}
+.si{width:100%;max-width:1440px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;}
+.sb-l{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.3);}
+.sb-r{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.4);}
+.live-dot{width:5px;height:5px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80;animation:pdot 2s infinite;}
+@keyframes pdot{0%,100%{opacity:1;box-shadow:0 0 6px #4ade80}50%{opacity:.4;box-shadow:0 0 2px #4ade80}}
+
+/* ── PAGE ── */
+.page{position:relative;z-index:1;padding-top:94px;min-height:100vh;}
+
+/* ── LOGIN ── */
+.login-page{min-height:calc(100vh - 94px);display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+.login-card{
+  width:100%;max-width:440px;
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:var(--r-xl);overflow:hidden;
+  box-shadow:var(--shadow-lg);
+  opacity:0;
+}
+
+/* card top with blue header */
+.lc-top{
+  background:var(--blue-dk);padding:28px 28px 24px;
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  border-bottom:3px solid var(--blue-lt);
+}
+.lc-logo{width:62px;height:62px;background:white;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 0 0 3px rgba(255,255,255,0.15);}
+.lc-logo img{width:100%;height:100%;object-fit:contain;}
+.lc-school{font-size:1rem;font-weight:800;color:white;text-align:center;}
+.lc-sub{font-family:var(--mono);font-size:0.56rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:1.5px;text-align:center;margin-top:-6px;}
+
+.lc-body{padding:28px 28px 24px;}
+.lc-title{font-size:1.25rem;font-weight:900;letter-spacing:-0.2px;margin-bottom:3px;color:var(--blue-dk);}
+.lc-sub2{font-family:var(--mono);font-size:0.62rem;color:var(--text-xs);margin-bottom:24px;}
+
+.f-grp{margin-bottom:14px;}
+.f-lbl{display:block;font-family:var(--mono);font-size:0.6rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-sm);margin-bottom:7px;}
+.f-inp{
+  width:100%;padding:12px 16px;
+  background:var(--bg);border:1.5px solid var(--border);
+  border-radius:var(--r-md);
+  font-family:var(--mono);font-size:0.85rem;color:var(--text-hd);
+  outline:none;transition:all 0.2s;
+}
+.f-inp:focus{background:white;border-color:var(--blue-lt);box-shadow:0 0 0 4px rgba(58,120,212,0.12);}
+
+.login-btn{
+  width:100%;padding:13px;
+  background:var(--blue-dk);color:white;border:none;
+  border-radius:var(--r-md);
+  font-family:var(--sans);font-size:0.88rem;font-weight:800;
+  cursor:pointer;transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  position:relative;overflow:hidden;
+}
+.login-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(255,255,255,0.08),transparent);pointer-events:none;}
+.login-btn:hover{background:var(--blue-md);transform:translateY(-1px);box-shadow:0 6px 20px rgba(26,58,107,0.3);}
+
+.demo-hint{
+  margin-top:12px;padding:9px 12px;
+  background:var(--amber-pale);border:1.5px solid var(--amber-pale2);
+  border-radius:var(--r-sm);text-align:center;
+  font-family:var(--mono);font-size:0.62rem;color:var(--amber);
+}
+.demo-hint b{color:var(--blue-dk);}
+
+.lc-toast{margin-top:10px;padding:10px 14px;border-radius:var(--r-sm);font-family:var(--mono);font-size:0.7rem;font-weight:500;border-left:3px solid;display:none;}
+.lc-toast.show{display:block;}
+.lc-toast.t-err{background:var(--red-pale);border-color:var(--red);color:var(--red);}
+
+/* ── DASHBOARD ── */
+.dash{display:none;padding:24px 24px 60px;max-width:1440px;margin:0 auto;}
+
+/* banner */
+.dash-banner{
+  background:var(--blue-dk);border-radius:var(--r-lg);
+  padding:18px 24px;margin-bottom:22px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:var(--shadow-md);border-left:4px solid var(--blue-lt);
+  opacity:0;
+}
+.db-left{display:flex;align-items:center;gap:14px;}
+.db-logo{width:44px;height:44px;background:white;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;overflow:hidden;padding:2px;box-shadow:0 0 0 2px rgba(255,255,255,0.15);}
+.db-logo img{width:100%;height:100%;object-fit:contain;}
+.db-school{font-size:0.95rem;font-weight:800;color:white;}
+.db-sub{font-family:var(--mono);font-size:0.56rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+.db-date{font-family:var(--mono);font-size:0.62rem;color:rgba(255,255,255,0.35);text-align:right;}
+
+/* stats */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.stat-card{
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:var(--r-lg);padding:20px 22px;
+  position:relative;overflow:hidden;
+  box-shadow:var(--shadow-sm);
+  opacity:0;
+  transition:box-shadow 0.2s,transform 0.2s;
+}
+.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.stat-bar{position:absolute;top:0;left:0;right:0;height:4px;border-radius:var(--r-lg) var(--r-lg) 0 0;}
+.stat-ico{font-size:1.2rem;margin-bottom:10px;display:block;}
+.stat-lbl{font-family:var(--mono);font-size:0.58rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-xs);margin-bottom:6px;}
+.stat-num{font-family:var(--mono);font-size:2.1rem;font-weight:700;letter-spacing:-2px;line-height:1;}
+.stat-dsc{font-family:var(--mono);font-size:0.58rem;color:var(--text-xs);margin-top:5px;}
+.c-blue{color:var(--blue-md);}
+.c-red{color:var(--red);}
+.c-teal{color:var(--teal);}
+.c-amber{color:var(--amber);}
+
+/* table */
+.tbl-section{
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:var(--shadow-sm);
+  opacity:0;
+}
+.tbl-head{
+  padding:16px 20px;border-bottom:1.5px solid var(--border);
+  background:var(--bg2);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+}
+.tbl-head-l{display:flex;align-items:baseline;gap:10px;}
+.tbl-title{font-size:0.92rem;font-weight:800;color:var(--text-bd);}
+.tbl-count{font-family:var(--mono);font-size:0.65rem;color:var(--text-xs);}
+.tbl-ctrl{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+
+.ctrl{
+  padding:8px 12px;background:var(--white);
+  border:1.5px solid var(--border);border-radius:100px;
+  font-family:var(--mono);font-size:0.7rem;color:var(--text-hd);
+  outline:none;transition:all 0.2s;
+}
+.ctrl:focus{border-color:var(--blue-lt);box-shadow:0 0 0 3px rgba(58,120,212,0.1);}
+.ctrl::placeholder{color:var(--text-xs);}
+#t-search{width:185px;}
+#t-filter{cursor:pointer;}
+
+.c-btn{
+  display:flex;align-items:center;gap:5px;
+  padding:8px 14px;border:1.5px solid var(--border);
+  border-radius:100px;background:var(--white);
+  font-family:var(--sans);font-size:0.7rem;font-weight:700;
+  color:var(--text-sm);cursor:pointer;transition:all 0.2s;
+}
+.c-btn:hover{border-color:var(--blue-lt);color:var(--blue-md);background:var(--blue-pale);}
+.c-btn.danger:hover{border-color:var(--red);color:var(--red);background:var(--red-pale);}
+
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--blue-dk);}
+th{padding:12px 16px;text-align:left;font-family:var(--mono);font-size:0.56rem;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.3);font-weight:500;white-space:nowrap;}
+td{padding:12px 16px;font-size:0.78rem;border-bottom:1px solid var(--border);font-family:var(--mono);color:var(--text-hd);transition:background 0.12s;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--bg);}
+
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:0.62rem;font-weight:700;font-family:var(--sans);white-space:nowrap;}
+.b-out{background:var(--red-pale);color:var(--red);border:1px solid var(--red-pale2);}
+.b-in {background:var(--teal-pale);color:var(--teal);border:1px solid var(--teal-pale2);}
+.badge::before{content:'●';font-size:0.38rem;}
+
+.dur-pill{background:var(--amber-pale);color:var(--amber);border:1px solid var(--amber-pale2);border-radius:100px;padding:2px 8px;font-size:0.6rem;font-weight:700;font-family:var(--sans);}
+
+.empty-cell{text-align:center;padding:56px;color:var(--text-xs);font-family:var(--sans);font-size:0.82rem;}
+
+.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.6s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+@media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.dash{padding:14px 14px 48px;}.subbar,.nav-pill{display:none;}.ni{padding:0 14px;}}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="ni">
+    <div class="brand">
+      <div class="brand-logo">
+        <img src="http://gerik.mrsm.edu.my/data/header/logo-school.png" alt="MRSM Gerik"
+             onerror="this.style.display='none';this.parentElement.innerHTML='🏫'"/>
+      </div>
+      <div>
+        <div class="brand-name">MRSM Gerik</div>
+        <div class="brand-sub">Panel Warden · SKP</div>
+      </div>
+    </div>
+
+    <div class="nav-pill">
+      <span class="nav-pill-lbl">Panel Pengurusan Warden</span>
+      <span class="nav-pill-tag">Demo</span>
+    </div>
+
+    <!-- login nav -->
+    <div class="nav-r-login" id="nav-login">
+      <div>
+        <div class="nav-clock-time" id="nav-time">--:--:--</div>
+        <div class="nav-clock-date" id="nav-date">--</div>
+      </div>
+      <a class="btn-nav" href="kiosk.html">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Kiosk Pelajar
+      </a>
+    </div>
+
+    <!-- dash nav -->
+    <div class="nav-r-dash" id="nav-dash">
+      <div class="nav-user">
+        <div class="nav-avatar">W</div>
+        <div class="nav-uname">Warden</div>
+      </div>
+      <div>
+        <div class="nav-clock-time" id="nav-time2">--:--:--</div>
+        <div class="nav-clock-date" id="nav-date2">--</div>
+      </div>
+      <a class="btn-nav" href="kiosk.html">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Kiosk
+      </a>
+      <button class="btn-nav danger" onclick="doLogout()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Log Keluar
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- SUBBAR -->
+<div class="subbar">
+  <div class="si">
+    <div class="sb-l">Bukit Nasah, Kampung Kenayat, 33300 Gerik, Hulu Perak, Perak · gerik.mrsm.edu.my</div>
+    <div class="sb-r"><div class="live-dot"></div>SKP v1.0 Demo · Panel Warden Aktif</div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- LOGIN -->
+  <div class="login-page" id="login-page">
+    <div class="login-card" id="login-card">
+      <div class="lc-top">
+        <div class="lc-logo">
+          <img src="http://gerik.mrsm.edu.my/data/header/logo-school.png" alt="Logo"
+               onerror="this.style.display='none';this.parentElement.innerHTML='🏫'"/>
+        </div>
+        <div>
+          <div class="lc-school">MRSM Gerik</div>
+          <div class="lc-sub">Hulu Perak · Perak · Est. 1994</div>
+        </div>
+      </div>
+      <div class="lc-body">
+        <div class="lc-title">Log Masuk Warden</div>
+        <div class="lc-sub2">// Akses terhad — warden & pentadbir maktab sahaja</div>
+        <div class="f-grp">
+          <label class="f-lbl">Nama Pengguna</label>
+          <input class="f-inp" id="a-user" type="text" placeholder="warden" autocomplete="username"/>
+        </div>
+        <div class="f-grp">
+          <label class="f-lbl">Kata Laluan</label>
+          <input class="f-inp" id="a-pass" type="password" placeholder="••••••••"
+            autocomplete="current-password"
+            onkeydown="if(event.key==='Enter') doLogin()"/>
+        </div>
+        <button class="login-btn" onclick="doLogin()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Masuk ke Panel Warden
+        </button>
+        <div class="demo-hint">Demo — pengguna: <b>warden</b> &nbsp;·&nbsp; kata laluan: <b>mrsm1234</b></div>
+        <div class="lc-toast" id="lc-toast"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="dash" id="dash">
+
+    <div class="dash-banner" id="dash-banner">
+      <div class="db-left">
+        <div class="db-logo">
+          <img src="http://gerik.mrsm.edu.my/data/header/logo-school.png" alt="Logo"
+               onerror="this.style.display='none';this.parentElement.innerHTML='🏫'"/>
+        </div>
+        <div>
+          <div class="db-school">Panel Warden — Sistem Kawalan Keluar Pelajar</div>
+          <div class="db-sub">MRSM Gerik &nbsp;·&nbsp; Hulu Perak &nbsp;·&nbsp; Perak</div>
+        </div>
+      </div>
+      <div class="db-date" id="dash-date">—</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card" id="sc1">
+        <div class="stat-bar" style="background:var(--blue-lt);"></div>
+        <span class="stat-ico">📋</span>
+        <div class="stat-lbl">Jumlah Rekod</div>
+        <div class="stat-num c-blue" id="s-total">0</div>
+        <div class="stat-dsc">semua log hari ini</div>
+      </div>
+      <div class="stat-card" id="sc2">
+        <div class="stat-bar" style="background:var(--red);"></div>
+        <span class="stat-ico">🚪</span>
+        <div class="stat-lbl">Sedang Keluar</div>
+        <div class="stat-num c-red" id="s-out">0</div>
+        <div class="stat-dsc">belum kembali</div>
+      </div>
+      <div class="stat-card" id="sc3">
+        <div class="stat-bar" style="background:var(--teal);"></div>
+        <span class="stat-ico">🏠</span>
+        <div class="stat-lbl">Sudah Balik</div>
+        <div class="stat-num c-teal" id="s-in">0</div>
+        <div class="stat-dsc">selamat kembali</div>
+      </div>
+      <div class="stat-card" id="sc4">
+        <div class="stat-bar" style="background:var(--amber);"></div>
+        <span class="stat-ico">👤</span>
+        <div class="stat-lbl">Pelajar Unik</div>
+        <div class="stat-num c-amber" id="s-unique">0</div>
+        <div class="stat-dsc">keluar hari ini</div>
+      </div>
+    </div>
+
+    <div class="tbl-section" id="tbl-section">
+      <div class="tbl-head">
+        <div class="tbl-head-l">
+          <div class="tbl-title">Log Keluar Masuk Pelajar</div>
+          <div class="tbl-count" id="t-count"></div>
+        </div>
+        <div class="tbl-ctrl">
+          <input class="ctrl" id="t-search" placeholder="🔍  Cari No. Matrik..." oninput="renderTable()"/>
+          <select class="ctrl" id="t-filter" onchange="renderTable()">
+            <option value="">Semua Status</option>
+            <option value="out">Sedang Keluar</option>
+            <option value="in">Sudah Balik</option>
+          </select>
+          <button class="c-btn" onclick="exportCSV()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Eksport CSV
+          </button>
+          <button class="c-btn danger" onclick="clearAll()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            Padam Semua
+          </button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Bil.</th><th>No. Matrik</th><th>Tarikh</th>
+            <th>Masa Keluar</th><th>Masa Balik</th>
+            <th>Tempoh</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="log-tbody"></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const STORE = 'mrsm_gerik_skp_v4';
+const getLogs = () => { try { return JSON.parse(sessionStorage.getItem(STORE)) || []; } catch { return []; } };
+const saveLogs = d => sessionStorage.setItem(STORE, JSON.stringify(d));
+
+if (!sessionStorage.getItem(STORE)) {
+  const s=[['25GRK001','out'],['25GRK002','in'],['25GRK003','in'],['25GRK007','out'],['25GRK012','in']];
+  saveLogs(s.map(([matric,status],i)=>{
+    const ts=Date.now()-(i+1)*22*60000;
+    const e={id:i+1,matric,date:new Date(ts).toLocaleDateString('ms-MY'),
+      outTime:new Date(ts).toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'}),
+      outTs:ts,inTime:null,inTs:null,status};
+    if(status==='in'){const it=ts+(20+i*8)*60000;e.inTime=new Date(it).toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'});e.inTs=it;}
+    return e;
+  }));
+}
+
+// safe getter
+const el = id => document.getElementById(id);
+
+// clock
+function tick() {
+  const d = new Date();
+  const t = d.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const dt = d.toLocaleDateString('ms-MY',{weekday:'short',day:'numeric',month:'short'}).toUpperCase();
+  ['nav-time','nav-time2'].forEach(id => { const e=el(id); if(e) e.textContent=t; });
+  ['nav-date','nav-date2'].forEach(id => { const e=el(id); if(e) e.textContent=dt; });
+}
+setInterval(tick, 1000); tick();
+
+function doLogin() {
+  const u = el('a-user').value.trim();
+  const p = el('a-pass').value;
+  const t = el('lc-toast');
+
+  if (!(u === 'warden' && p === 'mrsm1234')) {
+    anime({ targets:'#login-card', translateX:[0,-10,10,-8,8,-4,4,0], duration:500, easing:'easeInOutSine' });
+    t.className='lc-toast t-err show';
+    t.textContent='✕ Nama pengguna atau kata laluan tidak sah.';
+    clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),4000);
+    return;
+  }
+
+  anime({
+    targets:'#login-card', opacity:0, scale:0.97, translateY:12, duration:350, easing:'easeInQuad',
+    complete: () => {
+      el('login-page').style.display='none';
+      el('dash').style.display='block';
+      el('nav-login').style.display='none';
+      el('nav-dash').style.display='flex';
+      const d = new Date();
+      el('dash-date').textContent = d.toLocaleDateString('ms-MY',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
+      updateStats(); renderTable(); animateDash();
+    }
+  });
+}
+
+function animateDash() {
+  anime({ targets:'#dash-banner', opacity:[0,1], translateY:[-16,0],  duration:600, easing:'easeOutExpo' });
+  anime({ targets:['#sc1','#sc2','#sc3','#sc4'], opacity:[0,1], translateY:[20,0],  delay:anime.stagger(70,{start:150}), duration:550, easing:'easeOutExpo' });
+  anime({ targets:'#tbl-section', opacity:[0,1], translateY:[16,0],  delay:450, duration:600, easing:'easeOutExpo' });
+
+  // count-up animation for stats
+  const logs = getLogs();
+  const vals = { total:logs.length, out:logs.filter(l=>l.status==='out').length, inp:logs.filter(l=>l.status==='in').length, unique:[...new Set(logs.map(l=>l.matric))].length };
+  [['s-total',vals.total],['s-out',vals.out],['s-in',vals.inp],['s-unique',vals.unique]].forEach(([id,end]) => {
+    const target = el(id);
+    if (!target) return;
+    anime({ targets:{v:0}, v:end, round:1, duration:1000, delay:500, easing:'easeOutExpo',
+      update(a) { target.textContent = Math.round(a.animations[0].currentValue); }
+    });
+  });
+}
+
+function doLogout() {
+  anime({
+    targets:'#dash', opacity:0, translateY:8, duration:300, easing:'easeInQuad',
+    complete: () => {
+      el('dash').style.display='none';
+      el('login-page').style.display='flex';
+      el('nav-login').style.display='flex';
+      el('nav-dash').style.display='none';
+      el('a-user').value=''; el('a-pass').value='';
+      anime({ targets:'#login-card', opacity:[0,1], scale:[0.97,1], translateY:[16,0],  duration:600, easing:'easeOutExpo' });
+      el('a-user').focus();
+    }
+  });
+}
+
+function calcDur(a,b){const m=Math.round((b-a)/60000);return m<60?m+' min':Math.floor(m/60)+'j '+(m%60)+'m';}
+
+function updateStats() {
+  const l = getLogs();
+  const ids = ['s-total','s-out','s-in','s-unique'];
+  const vals = [l.length, l.filter(x=>x.status==='out').length, l.filter(x=>x.status==='in').length, [...new Set(l.map(x=>x.matric))].length];
+  ids.forEach((id,i) => { const e=el(id); if(e) e.textContent=vals[i]; });
+}
+
+function renderTable() {
+  const search = (el('t-search')?.value||'').toLowerCase();
+  const filt   = el('t-filter')?.value||'';
+  const filtered = getLogs().filter(l=>(!search||l.matric.toLowerCase().includes(search))&&(!filt||l.status===filt));
+  const tc = el('t-count'); if(tc) tc.textContent=`(${filtered.length} rekod)`;
+  const tbody = el('log-tbody'); if(!tbody) return;
+
+  if (!filtered.length) {
+    tbody.innerHTML=`<tr><td class="empty-cell" colspan="7">Tiada rekod dijumpai</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtered.map((l,i) => {
+    const dur=l.inTs?`<span class="dur-pill">${calcDur(l.outTs,l.inTs)}</span>`:`<span style="color:var(--text-xs);font-size:0.7rem">Sedang keluar</span>`;
+    const badge=l.status==='out'?`<span class="badge b-out">Keluar</span>`:`<span class="badge b-in">Sudah Balik</span>`;
+    return `<tr>
+      <td style="color:var(--text-xs);font-weight:600">${String(i+1).padStart(2,'0')}</td>
+      <td style="font-weight:700;color:var(--blue-dk);letter-spacing:1.5px">${l.matric}</td>
+      <td style="color:var(--text-sm)">${l.date}</td>
+      <td style="color:var(--red);font-weight:700">${l.outTime}</td>
+      <td style="color:var(--teal);font-weight:700">${l.inTime||'<span style="color:var(--text-xs)">—</span>'}</td>
+      <td>${dur}</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join('');
+
+  anime({ targets:'#log-tbody tr', opacity:[0,1], translateX:[-6,0], delay:anime.stagger(25), duration:280, easing:'easeOutQuad' });
+}
+
+function exportCSV() {
+  const rows=[['Bil','No. Matrik','Tarikh','Masa Keluar','Masa Balik','Tempoh','Status']];
+  getLogs().forEach((l,i)=>rows.push([i+1,l.matric,l.date,l.outTime,l.inTime||'',l.inTs?calcDur(l.outTs,l.inTs):'Sedang keluar',l.status==='out'?'Keluar':'Sudah Balik']));
+  const csv=rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+  a.download=`SKP_MRSM_Gerik_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+function clearAll() {
+  if(!confirm('Padam SEMUA rekod log? Tindakan ini tidak boleh dibatalkan.')) return;
+  saveLogs([]);
+  anime({ targets:'#log-tbody', opacity:[1,0], duration:200, easing:'easeInQuad', complete:()=>{updateStats();renderTable();} });
+}
+
+// auto-refresh every 3s
+setInterval(() => { if(el('dash')?.style.display!=='none'){updateStats();renderTable();} }, 3000);
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script>
+// anime.js now loaded — trigger login card entrance
+anime({ targets:'#login-card', opacity:[0,1], translateY:[24,0], scale:[0.97,1], duration:700, easing:'easeOutExpo' });
+el('a-user').focus();
+</script>
+</body>
+</html>
